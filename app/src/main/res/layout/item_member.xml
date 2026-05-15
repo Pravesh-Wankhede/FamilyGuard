@@ -1,0 +1,161 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Profile Image -->
+
+        <ImageView
+            android:id="@+id/guard_img"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/ic_userprofile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Name -->
+
+        <TextView
+            android:id="@+id/text_userprofile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pravesh"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#7FFFD4"
+            app:layout_constraintStart_toEndOf="@id/guard_img"
+            app:layout_constraintTop_toTopOf="@id/guard_img"
+            app:layout_constraintEnd_toStartOf="@id/time"
+            android:layout_marginStart="12dp"/>
+
+        <!-- Time -->
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="14:17"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_userprofile"/>
+
+        <!-- Location Icon -->
+
+        <ImageView
+            android:id="@+id/location_icon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_location_pin"
+            app:layout_constraintStart_toStartOf="@id/text_userprofile"
+            app:layout_constraintTop_toBottomOf="@id/text_userprofile"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Address -->
+
+        <TextView
+            android:id="@+id/user_address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:text="Gandhi ward, Desaiganj (Wadsa)"
+            android:textStyle="bold"
+            android:layout_marginStart="6dp"
+            app:layout_constraintStart_toEndOf="@id/location_icon"
+            app:layout_constraintTop_toTopOf="@id/location_icon"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Battery -->
+
+        <LinearLayout
+            android:id="@+id/battery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            app:layout_constraintStart_toStartOf="@id/guard_img"
+            app:layout_constraintTop_toBottomOf="@id/guard_img">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_battery"
+                app:tint="#7FFFD4" />
+
+            <TextView
+                android:id="@+id/txt_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="97%"
+                android:textStyle="bold"
+                android:textColor="#7FFFD4"
+                android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
+
+        <!-- Distance -->
+
+        <LinearLayout
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@id/battery"
+            app:layout_constraintTop_toTopOf="@id/battery">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_distance"/>
+
+            <TextView
+                android:id="@+id/txt_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9 Km"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"/>
+
+        </LinearLayout>
+
+        <!-- Wifi -->
+
+        <LinearLayout
+            android:id="@+id/wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="20dp"
+            app:layout_constraintStart_toEndOf="@id/distance"
+            app:layout_constraintTop_toTopOf="@id/battery">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_wifi"/>
+
+        </LinearLayout>
+
+        <!-- Phone -->
+
+        <ImageView
+            android:id="@+id/img_telephone"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_telephone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/battery"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

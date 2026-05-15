@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1032594805948",
+    "project_id": "familyguard-c1a20",
+    "storage_bucket": "familyguard-c1a20.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032594805948:android:4f5106a2a2b9279888ecb9",
+        "android_client_info": {
+          "package_name": "com.example.familyprotector"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1032594805948-39uajt50j216tutklkmf0773dcpn16j2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.familyprotector",
+            "certificate_hash": "4acfd5aa4529d3b70f3884f0f4ac4f0c4e498ab1"
+          }
+        },
+        {
+          "client_id": "1032594805948-93rktpfl6229a1o5tbk1q4g643b73hhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTzSH79eQjZK1MQ6kycPwFr_4TH_AGrX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1032594805948-93rktpfl6229a1o5tbk1q4g643b73hhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

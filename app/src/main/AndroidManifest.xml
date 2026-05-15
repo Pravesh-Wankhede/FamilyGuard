@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".ui.theme.MyFamilyApplication"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/Theme.FamilyProtector">
 
-        <activity
-            android:name=".ui.theme.HomeScreen"
-            android:exported="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC0bK5XCtcEN2Hd760iM3CNbXP-sgBPR2c" />
 
+        <activity
+            android:name=".ui.theme.MainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name="com.example.familyprotector.ui.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name="com.example.familyprotector.ui.theme.SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity
-            android:name=".GuardScreen"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.FamilyProtector" />
 
     </application>
 

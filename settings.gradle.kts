@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Family Protector"
 include(":app")
- 
