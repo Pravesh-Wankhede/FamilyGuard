@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -19,11 +21,23 @@ import com.example.familyprotector.ui.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
     private lateinit var inviteAdapter: InviteAdapter
     private val listContacts = ArrayList<ContactModel>()
+
+    // Permission
+    private val contactPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            loadContacts()
+        } else {
+            Toast.makeText(requireContext(), "Contacts permission denied", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +50,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ✅ Members list (dummy)
+        // Members list (dummy)
         val listMember = listOf(
             MemberModel("Pravesh", "Gandhi ward", "97%", "9 Km"),
             MemberModel("Steve", "Queens", "17%", "1285 Km"),
@@ -47,83 +61,80 @@ class HomeFragment : Fragment() {
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = MemberAdapter(listMember)
 
-        // ✅ Invite Recycler
+        // Invite Recycler setup
         inviteAdapter = InviteAdapter(listContacts)
-
         val inviteRecycler = view.findViewById<RecyclerView>(R.id.recycler_invite)
         inviteRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         inviteRecycler.adapter = inviteAdapter
 
-        // ✅ Load contacts safely (NO LAG)
-        loadContacts()
+        //  Permission check and request
+        checkAndRequestContactPermission()
 
-        // ✅ Logout (fixed)
+        // Logout
         val threeDots = view.findViewById<ImageView>(R.id.menu_dots)
         threeDots.setOnClickListener {
-
             SharedPreference.setLogin(false)
             FirebaseAuth.getInstance().signOut()
-
             val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.flags =
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
     }
 
-    // 🔥 SAFE CONTACT LOADER
-    private fun loadContacts() {
-
-        if (ContextCompat.checkSelfPermission(
+    //  Permission check
+    private fun checkAndRequestContactPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.READ_CONTACTS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+            ) == PackageManager.PERMISSION_GRANTED -> {
 
-            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-
-                val contacts = fetchContacts()
-
-                requireActivity().runOnUiThread {
-                    listContacts.clear()
-                    listContacts.addAll(contacts)
-                    inviteAdapter.notifyDataSetChanged()
-                }
+                loadContacts()
+            }
+            else -> {
+                //  Permission popup
+                contactPermissionRequest.launch(Manifest.permission.READ_CONTACTS)
             }
         }
     }
 
-    // 🔥 CONTACT FETCH (SAFE)
-    private fun fetchContacts(): ArrayList<ContactModel> {
 
+    private fun loadContacts() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val contacts = withContext(Dispatchers.IO) {
+                fetchContacts()
+            }
+            listContacts.clear()
+            listContacts.addAll(contacts)
+            inviteAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun fetchContacts(): ArrayList<ContactModel> {
         val list = ArrayList<ContactModel>()
         val cr = requireActivity().contentResolver
 
         val cursor = cr.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                ContactsContract.CommonDataKinds.Phone.NUMBER
+            ),
             null,
             null,
-            null,
-            null
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
         )
 
         cursor?.use {
+            val nameIndex = it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val numberIndex = it.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+
             while (it.moveToNext()) {
+                val name = it.getString(nameIndex) ?: continue
+                val phone = it.getString(numberIndex) ?: continue
 
-                val name = it.getString(
-                    it.getColumnIndexOrThrow(
-                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
-                    )
-                )
-
-                val phone = it.getString(
-                    it.getColumnIndexOrThrow(
-                        ContactsContract.CommonDataKinds.Phone.NUMBER
-                    )
-                )
-
-                if (!phone.isNullOrEmpty()) {
+                if (phone.isNotEmpty()) {
                     list.add(ContactModel(name, phone))
                 }
             }
